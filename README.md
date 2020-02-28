@@ -1,2 +1,2 @@
 # gstunnel
-STunnel Docker image compatible with G Suite SLDAP tunneling.
+STunnel Docker image compatible with Google G Suite SLDAP tunneling.
