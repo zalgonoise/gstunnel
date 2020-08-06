@@ -1,4 +1,20 @@
 #!/bin/sh
+# Run a STunnel service in docker, via:
+#       docker run -dit \
+#       -v `find /dir/ -name "Google*.zip"`:/data/Google.zip \
+#       -p 1636:1636 --name gstunnel \
+#       zalgonoise/gstunnel:latest
+#
+#       docker run -dit \
+#       -v `find /dir/ -name "Google*.key"`:/data/stunnel.key \
+#       -v `find /dir/ -name "Google*.crt"`:/data/stunnel.crt \
+#       -p 1636:1636 --name gstunnel \
+#       zalgonoise/gstunnel:latest
+#
+
+
+
+
 
 # Create configuration file for STunnel
 # Defaults to Google's G Suite LDAP parameters
@@ -45,7 +61,7 @@ fi
 # Expects certificate in the /data directory
 # Generates new crt/key if they aren't there
 
-if ! [ -f /data/stunnel.crt ]
+if ! [ -f /data/*.crt ] || ! [ -f /data/*.key ]
 then
     openssl req -x509 -nodes -newkey rsa:2048 -days 3650 -subj '/CN=stunnel' \
                 -keyout stunnel.key -out stunnel.crt
@@ -58,15 +74,17 @@ fi
 
 # Pushes default config from /etc/stunnel/stunnel.conf
 # Unless it's specified when the container is ran (as a parameter)
-# e.g.: docker run \
-#       -dit -v /dir:/data \
-#       -p 1636:1636 --link ldap \
+# e.g.: docker run -dit \
+#       -v `find /dir/ -name "Google*.zip"`:/data/Google.zip \
+#       -p 1636:1636 \
 #       zalgonoise/gstunnel:1.0 /data/stunnel.conf
 
 
 if [ -z "$@" ]
 then
-    exec stunnel /etc/stunnel/stunnel.conf
+    echo "Starting STunnel with default config"
+    sh -c stunnel /etc/stunnel/stunnel.conf 
 else
-    exec stunnel "$@"
+    echo "Starting STunnel with custom config"
+    sh -c stunnel "$@" 
 fi
