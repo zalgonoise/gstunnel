@@ -34,6 +34,14 @@ fi
 
 cd /data
 
+# Extracts contents from .zip file if provided
+
+if [ -f /data/*.zip ]
+then 
+    unzip /data/*.zip 
+fi
+
+
 # Expects certificate in the /data directory
 # Generates new crt/key if they aren't there
 
@@ -42,6 +50,9 @@ then
     openssl req -x509 -nodes -newkey rsa:2048 -days 3650 -subj '/CN=stunnel' \
                 -keyout stunnel.key -out stunnel.crt
     chmod 600 stunnel.pem
+else 
+    mv /data/*.crt /data/stunnel.crt
+    mv /data/*.key /data/stunnel.key
 fi
 
 
@@ -59,4 +70,3 @@ then
 else
     exec stunnel "$@"
 fi
-
