@@ -9,7 +9,8 @@ RUN apk add \
     --no-cache \
     stunnel \
     libressl \
-    unzip
+    unzip \
+    ca-certificates
 
 COPY entrypoint.sh /entrypoint.sh
 
