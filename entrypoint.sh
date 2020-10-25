@@ -69,9 +69,6 @@ then
 else 
     mv /data/*.crt /data/stunnel.crt
     mv /data/*.key /data/stunnel.key
-
-    cp /data/stunnel.crt /usr/local/share/ca-certificates/stunnel.crt 
-    update-ca-certificates 2>&/dev/null
 fi
 
 
